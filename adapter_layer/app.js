@@ -1,27 +1,20 @@
-import express from 'express'
-import 'dotenv/config.js'
-import authRoutes from './routes/authRoute.js'
+import express from "express";
+import "dotenv/config";
+import authRoutes from "./routes/authRoute.js";
 
+const app = express();
 
-const app = express()
+app.use(express.json());
 
-
-
-app.use(express.json())
-
-
+// request logger first
 app.use((req, res, next) => {
-  console.log(req.path, req.method)
-  next()
-})
+  console.log(req.path, req.method);
+  next();
+});
 
-try {
-  app.listen(process.env.PORT || 5000, () => {
-    console.log(`Listening to port ${process.env.PORT || 5000}...`)
-  })
-} catch (error) {
-  console.log(error)
-}
+// routes before listen
+app.use("/user", authRoutes);
 
-
-app.use('/auth', authRoutes)
+app.listen(process.env.PORT || 5000, () => {
+  console.log(`Listening to port ${process.env.PORT || 5000}...`);
+});
